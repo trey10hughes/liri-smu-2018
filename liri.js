@@ -16,7 +16,19 @@ var arg2 = process.argv[3]; //second argument: song name/movie name
 
 switch(command){
 	case "my-tweets":
-	console.log("yeet");
+		console.log("yeet");
+
+		var params = {screen_name: 'nodejs'};
+
+		client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  		if (!error) {
+  			for(var i = 0; i < tweets.length; i++) {
+  				console.log("CREATED AT: " + tweets[i].created_at + "\n");
+
+  				console.log("text: " + tweets[i].text + "\n----------------------------------");
+  			}
+  		}
+		});
 	break;
 
 	case "spotify-this-song":
