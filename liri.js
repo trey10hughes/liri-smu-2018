@@ -12,7 +12,7 @@ var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
 var command = process.argv[2]; //command for LIRI
-var arg2 = process.argv[3]; //second argument: song name/movie name
+var searchTerm = process.argv[3]; //second argument: song name/movie name
 
 switch(command){
 	case "my-tweets":
@@ -33,6 +33,34 @@ switch(command){
 
 	case "spotify-this-song":
 	console.log("yeet");
+
+	if(searchTerm === undefined){
+		searchTerm = "The Sign by Ace of Base";
+	}
+
+		spotify.search(
+		{
+			type: "track",
+			query: searchTerm
+		},
+		function(err, data) {
+			if (err) {
+				console.log("ERROR: " + err);
+			}
+
+			var searchResults = data.tracks.items;
+
+			for (var i = 0; i < searchResults.length; i++) {
+				console.log("Artist Name: " + searchResults[i].artists.name); //artist name
+				console.log("\nSong Name: " + searchResults[i].name); //song name
+				console.log("\nPreview URL: " + searchResults[i].preview_url); //preview url
+				console.log("\nAlbum Name: " + searchResults[i].album.name) //album name
+				console.log("\n-------------------------------------");
+
+			}
+
+		}
+		);
 	break;
 
 	case "movie-this":
