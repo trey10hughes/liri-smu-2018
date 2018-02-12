@@ -6,6 +6,8 @@ var Spotify = require('node-spotify-api');
 
 var Twitter = require('twitter');
 
+var fs = require('fs');
+
 var keys = require("./keys")
 
 var spotify = new Spotify(keys.spotify);
@@ -16,7 +18,6 @@ var searchTerm = process.argv[3]; //second argument: song name/movie name
 
 switch(command){
 	case "my-tweets":
-		console.log("yeet");
 
 		var params = {screen_name: 'nodejs'};
 
@@ -32,7 +33,6 @@ switch(command){
 	break;
 
 	case "spotify-this-song":
-	console.log("yeet");
 
 	if(searchTerm === undefined){
 		searchTerm = "The Sign by Ace of Base";
@@ -64,10 +64,35 @@ switch(command){
 	break;
 
 	case "movie-this":
-	console.log("yeet");
+
+	var queryUrl = "https://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=40e9cece";
+
+	request(queryUrl, function(err, res, body) {
+
+		var movie = JSON.parse(body);
+
+		console.log("Title: " +movie.Title);
+		console.log("\nRelease Year: " +movie.Year);
+		console.log("\nIMDB Rating: " +movie.imdbRating);
+		console.log("\nCountry: " +movie.Country);
+		console.log("\nLanguage: " +movie.Language);
+		console.log("\nPlot: " +movie.Plot);
+		console.log("\nActors: " +movie.Actors);
+	});
+
 	break;
 
 	case "do-what-it-says":
-	console.log("yeet");
+	fs.readFile("random.txt", "utf8", function(error, data) {
+		console.log("random.txt says... " + data);
+
+		var args = data.split(",");
+		console.log(args[0]);
+		console.log(args[1]);
+
+		//can't figure out what to do from here. Obviously I could hard code in the spotify search,
+		//but that wouldn't work if I wanted to be able to run different commands based on what was in
+		//the random.txt file
+	})
 	break;
 }
